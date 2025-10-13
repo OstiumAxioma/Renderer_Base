@@ -4,6 +4,9 @@ project(OpenGL_Window)
 
 set(CMAKE_CXX_STANDARD 17)
 
+#往项目中添加一个全局预编译宏开启DEBUG宏条件
+add_definitions (-DDEBUG)
+
 include_directories(
     SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/header
     SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/include

@@ -54,7 +54,7 @@ int main()
         glfwPollEvents();
 
         //执行画布清理操作
-        GL_CALL(glClear(-1)); //用宏替换错误检查函数调用
+        GL_CALL(glClear(GL_COLOR_BUFFER_BIT)); //用宏替换错误检查函数调用
 
         //切换双缓存
         glfwSwapBuffers(window);
