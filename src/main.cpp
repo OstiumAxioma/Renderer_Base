@@ -3,6 +3,7 @@
 #include <GLFW/glfw3.h>
 #include <string>
 #include <assert.h> //断言
+#include "../wrapper/checkError.h"
 
 void frameBufferSizeCallBack(GLFWwindow* window, int width, int height) {
     std::cout << "Updated Window Size: " << width << ", " << height << std::endl;
@@ -13,39 +14,6 @@ void keyBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
     if (key == GLFW_KEY_W) {
         std::cout << "Press: " << key << std::endl;
     }
-}
-
-void checkError() {
-    //捕获错误代码
-    GLenum errorCode = glGetError();
-
-    //翻译错误代码
-    std::string error = "";
-    if (errorCode != GL_NO_ERROR) {
-        switch (errorCode)
-        {
-        case GL_INVALID_ENUM:
-            error = "INVALID_ENUM";
-            break;
-        case GL_INVALID_VALUE:
-            error = "INVALID_VALUE";
-            break;
-        case GL_INVALID_OPERATION:
-            error = "INVALID_OPERATION";
-            break;
-        case GL_OUT_OF_MEMORY:
-            error = "OUT_OF_MEMORY";
-            break;
-        default:
-            error = "UNKOWN_ERROR";
-            break;
-        }
-    }
-
-    std::cout << error << std::endl;
-
-    //根据传入的布尔值决定程序是否停止
-    assert(false);
 }
 
 int main()
