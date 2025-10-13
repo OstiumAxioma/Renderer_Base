@@ -43,6 +43,9 @@ void checkError() {
     }
 
     std::cout << error << std::endl;
+
+    //根据传入的布尔值决定程序是否停止
+    assert(false);
 }
 
 int main()
