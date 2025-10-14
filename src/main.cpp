@@ -19,7 +19,7 @@ void keyBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 int main()
 {
-    Application::getInstance()->test();
+    app->test();
 
     glfwInit();
     

@@ -1,6 +1,9 @@
 #pragma once
 #include <iostream>
 
+//¶¨Òåºê
+#define app Application::getInstance()
+
 //·â×°Application
 
 class Application {
