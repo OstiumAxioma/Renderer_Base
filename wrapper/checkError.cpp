@@ -16,24 +16,30 @@ void checkError() {
         {
         case GL_INVALID_ENUM:
             error = "INVALID_ENUM";
+            std::cout << error << std::endl;
+            assert(false);
             break;
         case GL_INVALID_VALUE:
             error = "INVALID_VALUE";
+            std::cout << error << std::endl;
+            assert(false);
             break;
         case GL_INVALID_OPERATION:
             error = "INVALID_OPERATION";
+            std::cout << error << std::endl;
+            assert(false);
             break;
         case GL_OUT_OF_MEMORY:
             error = "OUT_OF_MEMORY";
+            std::cout << error << std::endl;
+            assert(false);
             break;
         default:
             error = "UNKOWN_ERROR";
+            std::cout << error << std::endl;
+            assert(false);
             break;
         }
     }
 
-    std::cout << error << std::endl;
-
-    //根据传入的布尔值决定程序是否停止
-    assert(false);
 };

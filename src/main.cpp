@@ -4,6 +4,7 @@
 #include <string>
 #include <assert.h> //断言
 #include "../wrapper/checkError.h"
+#include "../application/application.h"
 
 void frameBufferSizeCallBack(GLFWwindow* window, int width, int height) {
     std::cout << "Updated Window Size: " << width << ", " << height << std::endl;
@@ -18,6 +19,8 @@ void keyBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 int main()
 {
+    Application::getInstance()->test();
+
     glfwInit();
     
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -54,7 +57,7 @@ int main()
         glfwPollEvents();
 
         //执行画布清理操作
-        GL_CALL(glClear(GL_COLOR_BUFFER_BIT)); //用宏替换错误检查函数调用
+        GL_CALL(glClear(-1)); //用宏替换错误检查函数调用
 
         //切换双缓存
         glfwSwapBuffers(window);

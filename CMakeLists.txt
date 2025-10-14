@@ -19,10 +19,11 @@ link_directories(
 aux_source_directory(${CMAKE_SOURCE_DIR}/src SOURCES)
 aux_source_directory(${CMAKE_SOURCE_DIR}/header HEADERS)
 add_subdirectory(wrapper)
+add_subdirectory(application)
 
 add_executable(OpenGL_Window
     ${SOURCES}
     ${HEADERS}
 )
 
-target_link_libraries(OpenGL_Window glfw3.lib wrapper)
+target_link_libraries(OpenGL_Window glfw3.lib wrapper app)
