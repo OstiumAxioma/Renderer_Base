@@ -6,6 +6,8 @@
 
 class GLFWwindow;
 
+using ResizeCallback = void(*)(int width, int height);
+
 //封装Application
 class Application {
 public:
@@ -27,6 +29,13 @@ public:
 		return mHeight;
 	}
 
+	void setResizeCallback(ResizeCallback callback) { 
+		mResizeCallback = callback;
+	}
+
+private:
+	static void frameBufferSizeCallback(GLFWwindow* window, int width, int height);
+
 private:
 	//全局唯一静态变量示例
 	static Application* mInstance;
@@ -34,6 +43,8 @@ private:
 	uint32_t mWidth {0};
 	uint32_t mHeight {0};
 	GLFWwindow* mWindow{ nullptr };
+
+	ResizeCallback mResizeCallback{ nullptr };
 
 	Application();
 

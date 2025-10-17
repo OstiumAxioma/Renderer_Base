@@ -48,6 +48,8 @@ bool Application::init(const int& width, const int& height) {
 		return false;
 	}
 
+	glfwSetFramebufferSizeCallback(mWindow, frameBufferSizeCallback);
+
 	return true;
 }
 bool Application::update() {
@@ -66,4 +68,13 @@ bool Application::update() {
 
 void Application::destroy() {
 	glfwTerminate();
+}
+
+void Application::frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
+	std::cout << "Resize" << std::endl;
+	if (Application::getInstance()->mResizeCallback != nullptr) {
+		Application::getInstance()->mResizeCallback(width, height);
+	}
+	
+	std::cout << "Width: " << width << " Height: " << height << std::endl;
 }
