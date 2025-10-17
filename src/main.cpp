@@ -1,14 +1,14 @@
-#include <iostream>
+ï»¿#include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <string>
-#include <assert.h> //¶ÏÑÔ
+#include <assert.h> //æ–­è¨€
 #include "../wrapper/checkError.h"
 #include "../application/application.h"
 
 void frameBufferSizeCallBack(GLFWwindow* window, int width, int height) {
     std::cout << "Updated Window Size: " << width << ", " << height << std::endl;
-    glViewport(0, 0, width, height); //¸üĞÂÊÓ¿Ú´óĞ¡
+    glViewport(0, 0, width, height); //æ›´æ–°è§†å£å¤§å°
 }
 
 void keyBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -19,50 +19,22 @@ void keyBack(GLFWwindow* window, int key, int scancode, int action, int mods) {
 
 int main()
 {
-    app->test();
-
-    glfwInit();
-    
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-
-    //ÆôÓÃºËĞÄÄ£Ê½/·ÇÁ¢¼´äÖÈ¾Ä£Ê½
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-    //´´½¨´°Ìå¶ÔÏóÖ¸ÕëÖ¸ÏòCreate³öÀ´µÄ´°¿Ú
-    GLFWwindow* window = glfwCreateWindow(800, 600, "OpenGL Window", NULL, NULL);
-
-
-    //ÉèÖÃµ±Ç°´°Ìå¶ÔÏóÎªOpenGLµÄÎèÌ¨
-    glfwMakeContextCurrent(window);
-
-
-    glfwSetFramebufferSizeCallback(window, frameBufferSizeCallBack);
-
-
-    glfwSetKeyCallback(window, keyBack);
-
-    //¼ÓÔØËùÓĞµ±Ç°°æ±¾µÄOpenglº¯Êı
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std::cout << "Failed to initialize GLAD" << std::endl;
+    if (!app->init(800, 600)) {
         return -1;
     }
 
-    //ÉèÖÃopenglÊÓ¿ÚºÍÇåÀíÑÕÉ«
-    glViewport(0, 0, 800, 600); //ÊÓ¿ÚÆğµã£¬´óĞ¡
-    glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //»­²¼ÇåÀíÑÕÉ«
 
-    while (!glfwWindowShouldClose(window)) {
+    //glfwSetFramebufferSizeCallback(window, frameBufferSizeCallBack);
+    //glfwSetKeyCallback(window, keyBack);
 
-        glfwPollEvents();
+    //è®¾ç½®openglè§†å£å’Œæ¸…ç†é¢œè‰²
+    glViewport(0, 0, 800, 600); //è§†å£èµ·ç‚¹ï¼Œå¤§å°
+    glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //ç”»å¸ƒæ¸…ç†é¢œè‰²
 
-        //Ö´ĞĞ»­²¼ÇåÀí²Ù×÷
-        GL_CALL(glClear(-1)); //ÓÃºêÌæ»»´íÎó¼ì²éº¯Êıµ÷ÓÃ
-
-        //ÇĞ»»Ë«»º´æ
-        glfwSwapBuffers(window);
+    while (app->update()) {
+        GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
     }
 
-    glfwTerminate();
+    app->destroy();
     return 0;
 }
