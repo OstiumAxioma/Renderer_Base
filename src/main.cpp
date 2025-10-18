@@ -10,6 +10,10 @@ void OnResize(int width, int height) {
     GL_CALL(glViewport(0, 0, width, height));
 }
 
+void OnKey(int key, int action, int mods) {
+	std::cout << "Key: " << key << " Action: " << action << " Mods: " << mods << std::endl;
+}
+
 int main()
 {
     if (!app->init(800, 600)) {
@@ -17,6 +21,7 @@ int main()
     }
 
 	app->setResizeCallback(OnResize);
+	app->setKeyBoardCallback(OnKey);
 
 
     //glfwSetFramebufferSizeCallback(window, frameBufferSizeCallBack);

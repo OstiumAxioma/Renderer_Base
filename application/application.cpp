@@ -53,6 +53,9 @@ bool Application::init(const int& width, const int& height) {
 	//用this指代当前全局位移的Application对象
 	glfwSetWindowUserPointer(mWindow, this);
 
+	//键盘响应函数
+	glfwSetKeyCallback(mWindow, KeyCallback);
+
 	return true;
 }
 bool Application::update() {
@@ -76,7 +79,17 @@ void Application::destroy() {
 void Application::frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
 	std::cout << "Resize" << std::endl;
 	Application* self = (Application*) glfwGetWindowUserPointer(window);
-	self->mResizeCallback(width, height);
-	
+	if (self->mResizeCallback != nullptr) {
+		self->mResizeCallback(width, height);
+	}
+
 	std::cout << "Width: " << width << " Height: " << height << std::endl;
+}
+
+void Application::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+	//按下ESC键关闭窗体
+	Application* self = (Application*)glfwGetWindowUserPointer(window);
+	if (self->mKeyBoardCallback != nullptr) {
+		self->mKeyBoardCallback(key, action, mods);
+	}
 }

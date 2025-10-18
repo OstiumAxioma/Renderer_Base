@@ -7,6 +7,7 @@
 class GLFWwindow;
 
 using ResizeCallback = void(*)(int width, int height);
+using KeyBoardCallback = void(*)(int key, int action, int mods);
 
 //封装Application
 class Application {
@@ -32,9 +33,14 @@ public:
 	void setResizeCallback(ResizeCallback callback) { 
 		mResizeCallback = callback;
 	}
+	void setKeyBoardCallback(KeyBoardCallback callback) {
+		mKeyBoardCallback = callback;
+	}
 
 private:
 	static void frameBufferSizeCallback(GLFWwindow* window, int width, int height);
+
+	static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
 private:
 	//全局唯一静态变量示例
@@ -44,7 +50,9 @@ private:
 	uint32_t mHeight {0};
 	GLFWwindow* mWindow{ nullptr };
 
+	//成员变量用于主函数调用
 	ResizeCallback mResizeCallback{ nullptr };
+	KeyBoardCallback mKeyBoardCallback{ nullptr };
 
 	Application();
 
