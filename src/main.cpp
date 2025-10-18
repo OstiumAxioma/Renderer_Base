@@ -16,6 +16,8 @@ int main()
         return -1;
     }
 
+	app->setResizeCallback(OnResize);
+
 
     //glfwSetFramebufferSizeCallback(window, frameBufferSizeCallBack);
     //glfwSetKeyCallback(window, keyBack);

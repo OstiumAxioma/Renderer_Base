@@ -50,6 +50,9 @@ bool Application::init(const int& width, const int& height) {
 
 	glfwSetFramebufferSizeCallback(mWindow, frameBufferSizeCallback);
 
+	//用this指代当前全局位移的Application对象
+	glfwSetWindowUserPointer(mWindow, this);
+
 	return true;
 }
 bool Application::update() {
@@ -72,9 +75,8 @@ void Application::destroy() {
 
 void Application::frameBufferSizeCallback(GLFWwindow* window, int width, int height) {
 	std::cout << "Resize" << std::endl;
-	if (Application::getInstance()->mResizeCallback != nullptr) {
-		Application::getInstance()->mResizeCallback(width, height);
-	}
+	Application* self = (Application*) glfwGetWindowUserPointer(window);
+	self->mResizeCallback(width, height);
 	
 	std::cout << "Width: " << width << " Height: " << height << std::endl;
 }
