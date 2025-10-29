@@ -98,7 +98,7 @@ void prepareSingleBuffer() {
 
     GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, colorVBO)); //换绑颜色VBO
     GL_CALL(glEnableVertexAttribArray(1)); //激活VAO的1号槽位用于存放
-    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0));
+    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0)); //解读为在1号槽位，压入3个来自colors的数据，都是GL_FLOAT数据格式，归一化关闭，用3个浮点数的步长位移来读取，不使用任何偏移量
 
     //5.2 解绑VAO
     glBindVertexArray(0);
@@ -113,12 +113,32 @@ void prepareInterleavedBuffer() {
         -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, //左下角 蓝色
     };
 
-    //2. 生成单个VBO
+    //2. 生成单个VBO交叉储存
     GLuint verticeVBO = 0;
     GL_CALL(glGenBuffers(1, &verticeVBO));
 
     GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, verticeVBO));
     GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
+
+    //3.1 生成VAO
+    GLuint VAO = 0;
+    GL_CALL(glGenVertexArrays(1, &VAO));
+
+    //3.2 绑定启用VAO
+    GL_CALL(glBindVertexArray(VAO));
+
+	//4. 给VAO绑定VBO压入数据
+    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, verticeVBO));
+
+    //5. 填充描述信息到VAO
+	GL_CALL(glEnableVertexAttribArray(0)); //位置属性
+    GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0)); // 位置属性
+
+	GL_CALL(glEnableVertexAttribArray(1)); //颜色属性
+    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)))); // 颜色属性，不需要换绑VBO，只需要改变偏移量，因为交叉存储在同一个VBO中
+
+    //6. 解绑VAO
+	GL_CALL(glBindVertexArray(0));
 
 }
 
@@ -139,7 +159,7 @@ int main()
     glViewport(0, 0, 800, 600); //视口起点，大小
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //画布清理颜色
 
-    prepareSingleBuffer();
+	prepareInterleavedBuffer();
 
     while (app->update()) {
         GL_CALL(glClear(GL_COLOR_BUFFER_BIT));
