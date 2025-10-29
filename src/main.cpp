@@ -14,43 +14,6 @@ void OnKey(int key, int action, int mods) {
 	std::cout << "Key: " << key << " Action: " << action << " Mods: " << mods << std::endl;
 }
 
-void prepareVBO() {
-    //创建单个VBO
-    GLuint VBO = 0;
-	GL_CALL(glGenBuffers(1, &VBO));
-    
-    //销毁单个VBO
-	GL_CALL(glDeleteBuffers(1, &VBO));
-    
-    //创建多个VBO
-	GLuint VBOs[3] = { 0 };
-	GL_CALL(glGenBuffers(3, VBOs));
-
-    //销毁多个VBO
-	GL_CALL(glDeleteBuffers(3, VBOs));
-}
-
-void bindVBOtoBuffer() {
-    //准备顶点数据
-    float vertices[] = {
-        //位置属性
-         0.5f,  0.5f, 0.0f,//右上角
-         0.5f, -0.5f, 0.0f,//右下角
-        -0.5f, -0.5f, 0.0f,//左下角
-	};
-
-	//生成单个VBO
-	GLuint VBO = 0;
-	GL_CALL(glGenBuffers(1, &VBO));
-
-	//绑定当前VBO到OpenGL状态机VBO插槽
-	//GL_ARRAY_BUFFER表示当前VBO插槽
-	GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-
-	//向当前VBO插槽传递数据/开辟显存空间
-	GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
-}
-
 //单一存储
 void prepareSingleBuffer() {
 
@@ -189,6 +152,27 @@ void prepareShader () {
         glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
         std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
     };
+
+	//5. 创建着色器程序
+    GLuint shaderProgram = 0;
+    shaderProgram = glCreateProgram();
+
+	//6. 将编译好的着色器附加到程序上
+    glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+
+	//7. 链接着色器程序
+	glLinkProgram(shaderProgram);
+	//检查链接错误
+	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << infoLog << std::endl;
+    };
+
+	//清理不再需要的着色器对象
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
 }
 
 int main()
