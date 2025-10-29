@@ -143,6 +143,54 @@ void prepareInterleavedBuffer() {
 
 }
 
+void prepareShader () {
+    //1. 完成shader源码并装入字符串
+	const char* vertexShaderSource =
+        "#version 460 core\n"
+		"layout (location = 0) in vec3 aPos;\n"
+		"void main()\n"
+		"{\n"
+		"   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+		"}\0";
+
+    const char* fragmentShaderSource =
+        "#version 460 core\n"
+        "out vec4 FragColor;\n"
+        "void main()\n"
+        "{\n"
+        "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+        "}\0";
+
+	//2. 创建顶点着色器对象并编译
+	GLuint vertexShader, fragmentShader;
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    //3. 输入shader代码
+	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+
+    int success = 0;
+    char infoLog[512];
+    //4. 执行代码编译
+	glCompileShader(vertexShader);
+	//检查编译结果
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	};
+
+	glCompileShader(fragmentShader);
+	//检查编译结果
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+
+    if (!success) {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
+    };
+}
+
 int main()
 {
     if (!app->init(800, 600)) {
@@ -160,6 +208,7 @@ int main()
     glViewport(0, 0, 800, 600); //视口起点，大小
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f); //画布清理颜色
 
+	prepareShader();
 	prepareInterleavedBuffer();
 
     while (app->update()) {
