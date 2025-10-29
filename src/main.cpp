@@ -137,7 +137,7 @@ void prepareInterleavedBuffer() {
 	GL_CALL(glEnableVertexAttribArray(1)); //颜色属性
     GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)))); // 颜色属性，不需要换绑VBO，只需要改变偏移量，因为交叉存储在同一个VBO中
 	//注意偏移量是在一个顶点内进行计算而不是整个数组，每个顶点数据都会偏移一次这个量。
-
+    
     //6. 解绑VAO
 	GL_CALL(glBindVertexArray(0));
 
