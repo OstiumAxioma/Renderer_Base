@@ -32,7 +32,7 @@ void prepareBuffer() {
         2, 1, 3
     };
 
-    vertexCount = sizeof(vertices) / (3 * sizeof(float));
+    vertexCount = sizeof(indices) / sizeof(int);
 
     //2. 生成单个VBO交叉储存
     GLuint VBO = 0;
@@ -156,8 +156,12 @@ void render() {
     glBindVertexArray(VAO);
 
     //3. 发出绘制指令
-    glDrawArrays(GL_TRIANGLES, 0, vertexCount);
+
+    //glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, (void*)(sizeof(int)*3));
 }
+
+
 
 int main()
 {
@@ -178,6 +182,7 @@ int main()
 
 	prepareShader();
 	prepareBuffer();
+    std::cout << vertexCount << std::endl;
 
     while (app->update()) {
         render();
