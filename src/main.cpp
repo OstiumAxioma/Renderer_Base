@@ -21,10 +21,17 @@ void OnKey(int key, int action, int mods) {
 void prepareBuffer() {
     //1. 定义单个数据集
     float vertices[] = {
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, //左下角 蓝色
-         0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, //右下角 绿色
-         0.0f,  0.5f, 0.0f, 1.0f, 0.0f, 0.0f, //右上角 红色
-         0.5f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, //右下角 蓝色
+        -0.5f, -0.5f, 0.0f, //左下角
+         0.5f, -0.5f, 0.0f, //右下角
+         0.0f,  0.5f, 0.0f, //右上角
+         0.5f,  0.5f, 0.0f, //右下角 
+    };
+
+    float colors[]{
+        0.0f, 0.0f, 1.0f, //蓝色
+        0.0f, 1.0f, 0.0f, //绿色
+        1.0f, 0.0f, 0.0f, //红色
+        0.0f, 0.0f, 1.0f, //蓝色
     };
 
     unsigned int indices[] = {
@@ -35,11 +42,15 @@ void prepareBuffer() {
     vertexCount = sizeof(indices) / sizeof(int);
 
     //2. 生成单个VBO交叉储存
-    GLuint VBO = 0;
-    GL_CALL(glGenBuffers(1, &VBO));
+    GLuint posVBO, colorVBO = 0;
 
-    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, VBO));
+    GL_CALL(glGenBuffers(1, &posVBO));
+    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, posVBO));
     GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW));
+
+    GL_CALL(glGenBuffers(1, &colorVBO));
+    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, colorVBO));
+    GL_CALL(glBufferData(GL_ARRAY_BUFFER, sizeof(colors), colors, GL_STATIC_DRAW));
 
     //3. 生成EBO
     GLuint EBO = 0;
@@ -53,18 +64,17 @@ void prepareBuffer() {
     //4.2 绑定启用VAO
     GL_CALL(glBindVertexArray(VAO));
 
-	//5. 给VAO绑定VBO压入数据
-    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, VBO));
-
-    //6.1 填充描述信息到VAO
+	//5.1 给VAO绑定VBO压入位置数据
+    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, posVBO));
 	GL_CALL(glEnableVertexAttribArray(0)); //位置属性
-    GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0)); // 位置属性
+    GL_CALL(glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0)); // 位置属性
 
+    //5.2 给VAO绑定VBO压入颜色数据
+    GL_CALL(glBindBuffer(GL_ARRAY_BUFFER, colorVBO));
 	GL_CALL(glEnableVertexAttribArray(1)); //颜色属性
-    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)))); // 颜色属性，不需要换绑VBO，只需要改变偏移量，因为交叉存储在同一个VBO中
-	//注意偏移量是在一个顶点内进行计算而不是整个数组，每个顶点数据都会偏移一次这个量。
+    GL_CALL(glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0)); // 颜色属性
 
-    //6.2 加入EBO
+    //6. 加入EBO
     GL_CALL(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO));
 
     
