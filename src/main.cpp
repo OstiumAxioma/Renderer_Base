@@ -158,7 +158,8 @@ void render() {
     //3. 发出绘制指令
 
     //glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
-    glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, (void*)(sizeof(int)*3));
+    glDrawElements(GL_TRIANGLES, vertexCount, GL_UNSIGNED_INT, 0);
+    glBindVertexArray(0);//记住每次bind后都要进行一次清除bind的操作
 }
 
 
