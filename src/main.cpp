@@ -1,10 +1,12 @@
 ﻿#include <iostream>
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
+#include "../frame/core.h"
+#include "../frame/shader.h"
+
 #include <string>
 #include <assert.h> //断言
 #include "../wrapper/checkError.h"
 #include "../application/application.h"
+
 
 int vertexCount = 0;
 GLuint VAO, shaderProgram = 0;

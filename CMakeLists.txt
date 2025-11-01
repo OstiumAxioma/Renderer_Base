@@ -4,6 +4,10 @@ project(OpenGL_Window)
 
 set(CMAKE_CXX_STANDARD 17)
 
+file(GLOB ASSETS "./assets")
+
+file(COPY ${ASSETS} DESTINATION ${CMAKE_BINARY_DIR})
+
 #往项目中添加一个全局预编译宏开启DEBUG宏条件
 add_definitions (-DDEBUG)
 
@@ -20,10 +24,11 @@ aux_source_directory(${CMAKE_SOURCE_DIR}/src SOURCES)
 aux_source_directory(${CMAKE_SOURCE_DIR}/header HEADERS)
 add_subdirectory(wrapper)
 add_subdirectory(application)
+add_subdirectory(frame)
 
 add_executable(OpenGL_Window
     ${SOURCES}
     ${HEADERS}
 )
 
-target_link_libraries(OpenGL_Window glfw3.lib wrapper app)
+target_link_libraries(OpenGL_Window glfw3.lib wrapper app frame)
